@@ -12,6 +12,14 @@ class Router {
     }
 
     /**
+     * Récupère toutes les routes définies dans le routeur
+     * @return array
+     */
+    public function getRoutes(): array {
+        return $this->routes;
+    }
+
+    /**
      * Pour un lien donné via un get, défini un chemin avec une fonction associée
      * @param $path
      * @param $callable
