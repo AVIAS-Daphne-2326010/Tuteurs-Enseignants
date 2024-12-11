@@ -18,6 +18,8 @@ class Dispatcher {
             $listAssociate = $dispatcherModel->createListAssociate();
 
             if (in_array($_POST['Id_teacher'], $listTeacher) && in_array($_POST['Internship_identifier'], $listStudent)){
+                print_r($listAssociate);
+                print_r([$_POST['Id_teacher'], $_POST['Internship_identifier']]);
                 if (!(in_array([$_POST['Id_teacher'], $_POST['Internship_identifier']], $listAssociate))) {
                     return $dispatcherModel->insertResponsible();
                 }
@@ -28,6 +30,7 @@ class Dispatcher {
             else {
                 return "Internship_identifier ou Id_Teacher inexistant dans ce departement";
             }
+
         }
         elseif ($_SERVER['REQUEST_METHOD'] === 'POST'){
             return "Merci de remplir tout les champs";
@@ -45,7 +48,7 @@ class Dispatcher {
             if (isset($_POST['Internship_identifier']) && isset($_POST['Id_teacher'])) {
                 $errorMessage = $this->association($db, $dispatcherModel);
             }
-            if (isset($_POST['id_teacher'])) {
+            if (isset($_POST['id_prof'])) {
                 $dispatcherModel->insertIs_responsible();
             }
         }
