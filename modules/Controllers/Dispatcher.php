@@ -8,7 +8,8 @@ use PDO;
 
 class Dispatcher {
     /**
-     * @return void
+     * @param $dispatcherModel
+     * @return string
      */
     public function association_direct($dispatcherModel): string {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['searchInternship']) && isset($_POST['searchTeacher']) && $_POST['searchInternship'] !== '' && $_POST['searchTeacher'] !== '') {
@@ -36,7 +37,8 @@ class Dispatcher {
     }
 
     /**
-     * @return void
+     * @param $dispatcherModel
+     * @return string
      */
     public function association_after_sort($dispatcherModel): string {
         $listTeacher = $dispatcherModel->createListTeacher();
