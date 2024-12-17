@@ -15,32 +15,46 @@ use PHPUnit\Framework\TestCase;
  * fonctionne comme prévu
  */
 class Error404Test extends TestCase{
+    private $layoutMock;
+    private $error404;
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    protected function setUp(): void {
+        // Création d'un mock pour la classe Layout
+        $this->layoutMock = $this->createMock(Layout::class);
+
+        // Initialisation de l'instance de Error404 en passant le mock Layout
+        $this->error404 = new Error404($this->layoutMock);
+
+    }
+
     /**
      * Test de la méthode show() du contrôleur Error404
      * @return void
      * @throws Exception
      */
     public function testShow() {
-        //Mocks de la classe Layout et vue
-        $mockLayout = $this->createMock(Layout::class);
-        $mockView = $this->createMock(Error404View::class);
+        // Création d'un mock pour la vue Error404
+        $viewMock = $this->createMock(Error404View::class);
 
-        //attentes pour le mock du layout
-        $mockLayout->expects($this->once())
-            ->method('renderTop')
-            ->with($this->equalTo('Erreur 404'),$this->equalTo('/_assets/styles/erreur404.css'));
-
-        $mockLayout->expects($this->once())
-            ->method('renderBottom')
-            ->with($this->equalTo(''));
-
-        //attentes pour le mock de la vue
-        $mockView->expects($this->once())
+        // Configuration du mock de la vue pour que showView soit appelée
+        $viewMock->expects($this->once())
             ->method('showView');
 
-        //instanciation des mocks
-        $error404Controller = new Error404($mockLayout,$mockView);
-        $error404Controller->show();
-        $this->assertTrue(true);
+        // Vérifier que renderTop a été appelé une fois
+        $this->layoutMock->expects($this->once())
+            ->method('renderTop')
+            ->with("Erreur 404", '/_assets/styles/erreur404.css');
+
+        // Vérifier que renderBottom a été appelé une fois
+        $this->layoutMock->expects($this->once())
+            ->method('renderBottom')
+            ->with('');
+
+        // Appeler la méthode show() du contrôleur
+        $this->error404->show();
     }
 }
