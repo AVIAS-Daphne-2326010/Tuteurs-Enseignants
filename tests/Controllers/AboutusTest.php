@@ -15,33 +15,43 @@ use PHPUnit\Framework\TestCase;
  * fonctionne comme prévu
  */
 class AboutusTest extends TestCase {
+    private $mockLayout;
+    private $mockView;
+
+    /**
+     * Configuration initale avant chaque test
+     * @return void
+     * @throws Exception
+     */
+    protected function setUp(): void{
+        $this->mockLayout = $this->createMock(Layout::class);
+        $this->mockView = $this->createMock(AboutUsView::class);
+    }
+
     /**
      * Test de la méthode show() du contrôleur Aboutus
      * @return void
      * @throws Exception
      */
     public function testShow(){
-        //Mock des classes layout et vue
-        $mockLayout = $this->createMock(Layout::class);
-        $mockView = $this->createMock(AboutUsView::class);
+        // Paramètres attendus
+        $title = "A Propos";
+        $cssFilePath = '';
+        $jsFilePath = '';
 
-        //attentes pour le mock du layout
-        $mockLayout->expects($this->once())
+        // S'assure que renderTop et renderBottom sont appelées
+        $this->mockLayout->expects($this->once())
             ->method('renderTop')
-            ->with($this->equalTo('A Propos'), $this->equalTo(''));
+            ->with($title,$cssFilePath);
 
-        $mockLayout->expects($this->once())
+        $this->mockLayout->expects($this->once())
             ->method('renderBottom')
-            ->with($this->equalTo(''));
+            ->with($jsFilePath);
 
-        //attentes pour le mock de la vue
-        $mockView->expects($this->once())
-            ->method('showView');
+        // Création du contrôleur, avec un constructeur personnalisé
+        $controller = new Aboutus($this->mockLayout);
 
-        //instanciation des mocks
-        $controller = new Aboutus($mockLayout,$mockView);
-
-        //exécution
+        // Appel de la méthode show() du contrôleur
         $controller->show();
     }
 }
