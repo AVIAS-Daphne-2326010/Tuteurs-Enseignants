@@ -59,7 +59,7 @@ class DispatcherTest extends TestCase{
 
     public function testAssociationDirect_MissingFields() {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST['searchTeacher'] = ''; // Champ manquant
+        $_POST['searchTeacher'] = '';
         $_POST['searchInternship'] = '';
 
         $result = $this->dispatcher->association_direct($this->dispatcherModelMock);
