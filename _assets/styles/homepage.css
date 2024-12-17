@@ -6,7 +6,7 @@ main {
 
 #map {
     height: 600px;
-    width: 70%;
+    width: 100%;
 }
 
 .center {
@@ -31,8 +31,24 @@ main a:hover {
     color: var(--main-color);
 }
 
+.selection {
+    display: flex;
+    flex-direction: row;
+}
+
 .btn {
+    background-color: #00558B;
     z-index: 0;
+}
+
+.btn:hover {
+    background-color: #E8CE7E;
+}
+
+/* Style des options dans le menu déroulant du select */
+.dropdown-content li>a, .dropdown-content li>span{
+    padding: 15px;
+    color: #00558B;
 }
 
 .table {
@@ -60,6 +76,29 @@ tbody {
     width: 100%;
     overflow-y: auto;
     display: block;
+}
+.pagination .prev,
+.pagination .next,
+.pagination .first,
+.pagination .last {
+    font-weight: bold;
+}
+
+.pagination a:visited  {
+    color: var(--text-color);
+}
+
+.pagination .active {
+    background-color: var(--tertiary-color);
+    border: solid 2px var(--tertiary-color);
+}
+
+.pagination .active:hover {
+    border: solid 2px var(--main-color);
+}
+
+.hidden {
+    margin: 0 10px;
 }
 
 main table {
@@ -94,7 +133,7 @@ main table {
 @media screen and (max-width: 640px) {
     #map {
         height: 250px;
-        width: 80%;
+        width: 100%;
     }
 
     .center {
