@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Attendre un moment avant de mettre à jour les options
     setTimeout(function() {
         updateSelectOptions();
-    }, 500); // Attendez 500ms avant de mettre à jour
+    }, 500);
 });
 
 function updateSelectOptions() {
@@ -17,3 +17,12 @@ function updateSelectOptions() {
         }
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.tooltipped');
+    var instances = M.Tooltip.init(elems, options);
+});
+
+$(document).ready(function(){
+    $('.tooltipped').tooltip();
+});

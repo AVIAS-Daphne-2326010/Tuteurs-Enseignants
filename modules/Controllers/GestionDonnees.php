@@ -5,14 +5,14 @@ namespace Blog\Controllers;
 use Blog\Views\Layout;
 use Includes\Database;
 use Blog\Views\GestionDonnees as GestionDonneesView;
-use Blog\Models\GestionDonnees as GestioinDonneesModel;
+use Blog\Models\GestionDonnees as GestionDonneesModel;
 use Exception;
 
 class GestionDonnees {
     private Layout $layout;
 
     /**
-     * Constructeur de la classe GestionDonnees
+     * Constructeur de la classe Dashboard
      * @param Layout $layout Instance de la classe Layout
      */
     public function __construct(Layout $layout) {
@@ -44,7 +44,7 @@ class GestionDonnees {
     }
 
     /**
-     * Contrôleur de GestionDonnees
+     * Contrôleur de la Dashboard
      * @return void
      */
     public function show(): void {
@@ -129,12 +129,12 @@ class GestionDonnees {
             }
 
             // Définition de variables
-            $title = "Gestion des données";
+            $title = "Dashboard";
             $cssFilePath = '_assets/styles/gestionDonnees.css';
             $jsFilePath = '_assets/scripts/gestionDonnees.js';
             $view = new \Blog\Views\GestionDonnees($message);
 
-            // Affichage de la vue GestionDonnees
+            // Affichage de la vue Dashboard
             $this->layout->renderTop($title, $cssFilePath);
             $view->showView();
             $this->layout->renderBottom($jsFilePath);
