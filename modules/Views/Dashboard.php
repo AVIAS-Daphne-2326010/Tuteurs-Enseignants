@@ -7,7 +7,7 @@ class Dashboard{
     /**
      * @param string $message
      */
-    public function __construct(private readonly string $message){}
+    public function __construct(private readonly string $message, private readonly string $errorMessage){}
 
     /**
      * Vue de la pas de Gestion des données
@@ -81,28 +81,53 @@ class Dashboard{
                 </div>
 
                 <p class="message"><?php echo $this->message; ?></p>
+                <p class="errorMessage"><?php echo $this->errorMessage?></p>
 
             </div>
 
-            <!--Exportation des tables : Etudiants/Professeurs/Stages-->
-            <div class="card-panel white">
-                <h4>Exporter :</h4>
-                <form action="/dashboard" method="POST">
-                    <div>
-                        <select name="export_list" required>
-                            <option value="" disabled selected>Choisissez la liste à exporter</option>
-                            <option value="student">Etudiants</option>
-                            <option value="teacher">Professeurs</option>
-                            <option value="internship">Stages</option>
-                        </select>
-                        <label>Choisissez la liste à exporter</label>
-                    </div>
-                    <div class="input-field">
-                        <button class="btn waves-effect waves-light" type="submit">Exporter
-                            <i class="material-icons right">send</i>
-                        </button>
-                    </div>
-                </form>
+            <!--Exportation-->
+            <div class="export">
+                <div class="card-panel white">
+                    <!--Exportation des listes : Etudiants/Professeurs/Stages-->
+                    <h4>Exporter une liste :</h4>
+                    <form action="/dashboard" method="POST">
+                        <div>
+                            <select name="export_list" required>
+                                <option value="" disabled selected>Choisissez la liste à exporter</option>
+                                <option value="student">Etudiants</option>
+                                <option value="teacher">Professeurs</option>
+                                <option value="internship">Stages</option>
+                            </select>
+                            <label>Choisissez la liste à exporter</label>
+                        </div>
+                        <div class="input-field">
+                            <button class="btn waves-effect waves-light" type="submit">Exporter
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!--Exportation des modèles des tables-->
+                <div class="card-panel white">
+                    <h4>Exporter un modèle:</h4>
+                    <form action="/dashboard" method="POST">
+                        <div>
+                            <select name="export_model" required>
+                                <option value="" disabled selected>Choisissez le modèle à exporter</option>
+                                <option value="student">Etudiants</option>
+                                <option value="teacher">Professeurs</option>
+                                <option value="internship">Stages</option>
+                            </select>
+                            <label>Choisissez la liste à exporter</label>
+                        </div>
+                        <div class="input-field">
+                            <button class="btn waves-effect waves-light" type="submit">Exporter
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </main>
 <?php

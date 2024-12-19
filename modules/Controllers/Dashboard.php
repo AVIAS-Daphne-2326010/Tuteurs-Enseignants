@@ -5,7 +5,7 @@ namespace Blog\Controllers;
 use Blog\Views\Layout;
 use Includes\Database;
 use Blog\Views\dashboard as GestionDonneesView;
-use Blog\Models\dashboard as GestioinDonneesModel;
+use Blog\Models\dashboard as GestionDonneesModel;
 use Exception;
 
 class Dashboard {
@@ -29,8 +29,7 @@ class Dashboard {
         $simplifyMessages = [
             'SQLSTATE' => "Une erreur de base de données est survenue. Une donnée que vous souhaitez insérer existe peut-être déjà.",
             'permission denied' => "Vous n'avez pas les droits nécessaires pour effectuer cette action.",
-            'file not found' => "Le fichier demandé est introuvable. Veuillez vérifier votre saisie.",
-            'Fatal' => "Erreur de taille mémoire, veuillez contacter l'administrateur du serveur.",
+            'file not found' => "Le fichier demandé est introuvable. Veuillez vérifier votre saisie."
         ];
 
         // Parcours des mots-clés pour personnaliser le message
@@ -55,6 +54,7 @@ class Dashboard {
 
         // Initialisation du message à afficher
         $message = '';
+        $errorMessage = '';
 
         // Vérification du rôle de l'utilisateur
         if (isset($_SESSION['role_name']) && (
@@ -92,7 +92,7 @@ class Dashboard {
                                 }
 
                                 elseif (!$model->validateHeaders($csvHeaders, $tableName)) {
-                                    $message = "Les en-têtes du fichier CSV ne correspondent pas à la structure de la table $tableName.";
+                                    $errorMessage = "Les en-têtes du fichier CSV ne correspondent pas à la structure de la table $tableName.";
                                     return;
                                 }
 
@@ -100,15 +100,16 @@ class Dashboard {
                                 elseif ($model->processCsv($csvFile, $tableName)) {
                                     $message .= "L'importation du fichier CSV pour la table $tableName a été réalisée avec succès! <br>";
                                 } else {
-                                    $message .= "Une erreur est survenue lors de l'importation pour la table $tableName. <br>";
+                                    $errorMessage .= "Une erreur est survenue lors de l'importation pour la table $tableName. <br>";
                                 }
                             }
                         } catch (Exception $e) {
-                            $message .= "Erreur lors de l'importation : <br>" . $this->handleExceptionMessage($e);
+                            $errorMessage .= "Erreur lors de l'importation : <br>" . $this->handleExceptionMessage($e);
                         }
                     } else {
-                        $message = "Table non valide ou non reconnue.";
+                        $errorMessage = "Table non valide ou non reconnue.";
                     }
+
                 // Gestion de l'exportation des fichiers CSV
                 } elseif (isset($_POST['export_list'])) {
                     $tableName = $_POST['export_list'];
@@ -125,6 +126,17 @@ class Dashboard {
                     } else {
                         echo "Table inconnue pour l'export";
                     }
+
+                // Gestion de l'exportation des modèles en CSV
+                } elseif (isset($_POST['export_model'])) {
+                    $tableName = $_POST['export_model'];
+                    if($model->isValidTable($tableName)) {
+                        try{
+                            $model->exportModel($tableName);
+                        } catch (Exception $e) {
+                            echo "Erreur lors de l'exportation : " . $this->handleExceptionMessage($e);
+                        }
+                    }
                 } else {
                     echo "Aucun fichier CSV n'est reconnu.";
                 }
@@ -134,7 +146,7 @@ class Dashboard {
             $title = "Gestion des données";
             $cssFilePath = '_assets/styles/gestionDonnees.css';
             $jsFilePath = '_assets/scripts/gestionDonnees.js';
-            $view = new \Blog\Views\Dashboard($message);
+            $view = new \Blog\Views\Dashboard($message,$errorMessage);
 
             // Affichage de la vue dashboard
             $this->layout->renderTop($title, $cssFilePath);
