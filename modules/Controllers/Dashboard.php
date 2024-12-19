@@ -134,7 +134,7 @@ class Dashboard {
                     $tableName = $_POST['export_model'];
                     if($model->isValidTable($tableName)) {
                         try{
-                            $model->exportModel($tableName);
+                            $model->exportModel($tableName);    
                         } catch (Exception $e) {
                             echo "Erreur lors de l'exportation : " . $this->handleExceptionMessage($e);
                         }
