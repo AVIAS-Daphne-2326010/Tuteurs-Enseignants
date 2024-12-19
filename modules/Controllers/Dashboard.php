@@ -29,7 +29,8 @@ class Dashboard {
         $simplifyMessages = [
             'SQLSTATE' => "Une erreur de base de données est survenue. Une donnée que vous souhaitez insérer existe peut-être déjà.",
             'permission denied' => "Vous n'avez pas les droits nécessaires pour effectuer cette action.",
-            'file not found' => "Le fichier demandé est introuvable. Veuillez vérifier votre saisie."
+            'file not found' => "Le fichier demandé est introuvable. Veuillez vérifier votre saisie.",
+            'Fatal' => "Erreur de taille mémoire, veuillez contacter l'administrateur du serveur.",
         ];
 
         // Parcours des mots-clés pour personnaliser le message
@@ -125,17 +126,6 @@ class Dashboard {
                         }
                     } else {
                         echo "Table inconnue pour l'export";
-                    }
-
-                // Gestion de l'exportation des modèles en CSV
-                } elseif (isset($_POST['export_model'])) {
-                    $tableName = $_POST['export_model'];
-                    if($model->isValidTable($tableName)) {
-                        try{
-                            $model->exportModel($tableName);    
-                        } catch (Exception $e) {
-                            echo "Erreur lors de l'exportation : " . $this->handleExceptionMessage($e);
-                        }
                     }
 
                 // Gestion de l'exportation des modèles en CSV

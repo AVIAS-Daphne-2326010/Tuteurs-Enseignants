@@ -113,7 +113,7 @@ class Dashboard{
 
                 <!--Exportation des modèles des tables-->
                 <div class="card-panel white">
-                    <div class="tooltip-container" data-positioni="top" data-tooltip="Exportation d'un modèle d'une liste choisie dans un fichier .csv (il n'y a que les colonnes de la liste choisie)">?</div>
+                    <div class="tooltip-container" data-tooltip="Exportation d'un modèle d'une liste choisie dans un fichier .csv (il n'y a que les colonnes de la liste choisie)">?</div>
                     <h4>Exporter un modèle:</h4>
                     <form action="/dashboard" method="POST">
                         <div>
