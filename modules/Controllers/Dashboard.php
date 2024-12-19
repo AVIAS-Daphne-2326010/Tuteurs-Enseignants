@@ -49,6 +49,7 @@ class Dashboard {
      * @return void
      */
     public function show(): void {
+        print_r('coucou22');
         // Récupération de l'instance de la base de données et des classes associées
         $db = \Includes\Database::getInstance();
         $model = new \Blog\Models\Dashboard($db);
@@ -133,7 +134,7 @@ class Dashboard {
                     $tableName = $_POST['export_model'];
                     if($model->isValidTable($tableName)) {
                         try{
-                            $model->exportModel($tableName);    
+                            $model->exportModel($tableName);
                         } catch (Exception $e) {
                             echo "Erreur lors de l'exportation : " . $this->handleExceptionMessage($e);
                         }

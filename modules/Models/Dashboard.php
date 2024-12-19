@@ -384,6 +384,7 @@ class Dashboard{
         $stmt->bindValue(':department', $department);
         $stmt->execute();
 
+        // Ecriture des données récupérées dans le fichier CSV
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             if ($tableName == 'teacher') {
                 $row['address$type'] = $row['address_type'];
