@@ -394,4 +394,53 @@ class Dashboard{
     }
 
 
+    /**
+     * Exporte un modèle CSV avec les bonnes colonnes
+     * @param string $tableName Nom de la table
+     * @return bool Retourne true si l'export réussit, sinon lève une exception
+     * @throws Exception Si le fichier CSV ne peut être ouvert ou si aucune colonne n'est trouvée dans la table
+     */
+    public function exportModel(string $tableName): bool {
+        $db = $this->db;
+
+        ob_start();
+
+        // Configuration des en-têtes HTTP pour le téléchargement du fichier CSV
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="' . $tableName . '_export.csv"');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        // Ouverture d'un flux de sortie pour écrire dans le fichier CSV
+        $output = fopen('php://output', 'w');
+        if ($output === false){
+            throw new Exception("Impossible d'ouvrir le fichier CSV");
+        }
+
+        // Récupération des colonnes de la base de données
+        $query = "DESCRIBE $tableName";
+        $stmt = $db->getConn()->prepare($query);
+        $stmt->execute();
+
+        $columns = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $columns[] = $row['Field'];
+        }
+
+        // Vérification que des colonnes ont bien été trouvées
+        if (empty($columns)) {
+            throw new Exception("Aucune colonne trouvée pour la table $tableName.");
+        }
+
+        // Ecriture des en-têtes dans le fichier CSV
+        fputcsv($output, $columns);
+
+        fclose($output);
+        $csvData = ob_get_clean();
+        echo $csvData;
+
+        exit();
+    }
+
+
 }
