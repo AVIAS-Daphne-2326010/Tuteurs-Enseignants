@@ -16,7 +16,13 @@ h3,h4 {
     align-items: center;
     justify-content: center;
     margin: 25px;
-    padding: 20px;
+    padding: 30px;
+}
+
+.export {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
 }
 
 .message{
@@ -27,6 +33,11 @@ h3,h4 {
 .dropdown-content li>a, .dropdown-content li>span{
     padding: 15px;
     color: #00558B;
+}
+
+/* Style des select */
+.select-wrapper input.select-dropdown{
+    margin: 0 35px 22px 0;
 }
 
 .row {
