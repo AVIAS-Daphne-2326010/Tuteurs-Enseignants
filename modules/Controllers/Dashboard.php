@@ -110,6 +110,7 @@ class Dashboard {
                     } else {
                         $errorMessage = "Table non valide ou non reconnue.";
                     }
+
                 // Gestion de l'exportation des fichiers CSV
                 } elseif (isset($_POST['export_list'])) {
                     $tableName = $_POST['export_list'];
@@ -132,7 +133,7 @@ class Dashboard {
                     $tableName = $_POST['export_model'];
                     if($model->isValidTable($tableName)) {
                         try{
-                            $model->exportModel($tableName);    
+                            $model->exportModel($tableName);
                         } catch (Exception $e) {
                             echo "Erreur lors de l'exportation : " . $this->handleExceptionMessage($e);
                         }
