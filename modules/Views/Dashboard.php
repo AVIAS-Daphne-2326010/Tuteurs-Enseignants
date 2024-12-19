@@ -6,6 +6,7 @@ class Dashboard{
 
     /**
      * @param string $message
+     * @param string $errorMessage
      */
     public function __construct(private readonly string $message, private readonly string $errorMessage){}
 
@@ -18,6 +19,7 @@ class Dashboard{
         <main>
             <h3> Gestion des données </h3>
             <div class="card-panel white">
+                <div class="tooltip-container" data-tooltip="1. Exporter le modèle correspondant <br> 2. Inscrivez vos données <br> 3. Importez le fichier csv ci-dessous">?</div>
                 <h4>Importer :</h4>
 
                 <!--Importation de nouveaux étudiants-->
@@ -89,6 +91,7 @@ class Dashboard{
             <div class="export">
                 <div class="card-panel white">
                     <!--Exportation des listes : Etudiants/Professeurs/Stages-->
+                    <div class="tooltip-container" data-tooltip="Exportation des données d'une liste choisie dans un fichier .csv">?</div>
                     <h4>Exporter une liste :</h4>
                     <form action="/dashboard" method="POST">
                         <div>
@@ -110,6 +113,7 @@ class Dashboard{
 
                 <!--Exportation des modèles des tables-->
                 <div class="card-panel white">
+                    <div class="tooltip-container" data-positioni="top" data-tooltip="Exportation d'un modèle d'une liste choisie dans un fichier .csv (il n'y a que les colonnes de la liste choisie)">?</div>
                     <h4>Exporter un modèle:</h4>
                     <form action="/dashboard" method="POST">
                         <div>
@@ -129,8 +133,6 @@ class Dashboard{
                     </form>
                 </div>
             </div>
-
-
         </main>
 <?php
     }
