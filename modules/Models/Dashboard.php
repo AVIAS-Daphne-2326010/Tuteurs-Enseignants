@@ -87,6 +87,11 @@ class Dashboard{
         // Comparaison des en-têtes du CSV avec les colonnes de la table dans la base de données
         $tableColumns = array_map('strtolower', $this->getTableColumn($tableName));
         $csvHeaders = array_map('strtolower', $headers);
+
+        error_log("Table columns: " . print_r($tableColumns, true));
+        error_log("CSV headers: " . print_r($csvHeaders, true));
+
+
         if (($tableName != 'teacher' AND array_diff($csvHeaders, $tableColumns)) OR ($tableName == 'teacher' AND array_diff($csvHeaders, array_merge($tableColumns, ['address$type'],['discipline_name'])))) {
             throw new Exception("Les colonnes CSV ne correspondent pas à la table $tableName ou au valeur demandé pour la table teacher. CSVHEADERS : $csvHeaders[0] , TABLECOLUMN : $tableColumns[0]");
         }
