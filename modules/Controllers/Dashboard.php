@@ -27,7 +27,7 @@ class Dashboard {
     private function handleExceptionMessage(Exception $e):string {
         // Correspondances entre mots-clés et message simplifiés
         $simplifyMessages = [
-            'SQLSTATE' => "Une erreur de base de données est survenue. Une donnée que vous souhaitez insérer existe peut-être déjà.",
+            //'SQLSTATE' => "Une erreur de base de données est survenue. Une donnée que vous souhaitez insérer existe peut-être déjà.",
             'permission denied' => "Vous n'avez pas les droits nécessaires pour effectuer cette action.",
             'file not found' => "Le fichier demandé est introuvable. Veuillez vérifier votre saisie.",
             'Fatal' => "Erreur de taille mémoire, veuillez contacter l'administrateur du serveur.",
@@ -35,13 +35,13 @@ class Dashboard {
 
         // Parcours des mots-clés pour personnaliser le message
         foreach ($simplifyMessages as $key => $simplifyMessage) {
-            if(str_contains($this->handleExceptionMessage($e), $key)) {
+            if(str_contains($e->getMessage(), $key)) {
                 return $simplifyMessage;
             }
         }
 
         // Message générique si aucun mot-clé ne correspond
-        return "Une erreur inattendue est survenue. Veuillez contacter l'administrateur.";
+        return "Une erreur inattendue est survenue. Veuillez contacter l'administrateur.". $e->getMessage();
     }
 
     /**
