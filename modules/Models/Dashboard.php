@@ -87,8 +87,8 @@ class Dashboard{
         // Comparaison des en-têtes du CSV avec les colonnes de la table dans la base de données
         $tableColumns = array_map('strtolower', $this->getTableColumn($tableName));
         $csvHeaders = array_map('strtolower', $headers);
-        if (($tableName != 'teacher' AND array_diff($csvHeaders, $tableColumns)) OR ($tableName = 'teacher' AND array_diff($csvHeaders, array_merge($tableColumns, ['address$type'],['discipline_name'])))) {
-            throw new Exception("Les colonnes CSV ne correspondent pas à la table $tableName ou au valeur demandé pour la table teacher.");
+        if (($tableName != 'teacher' AND array_diff($csvHeaders, $tableColumns)) OR ($tableName == 'teacher' AND array_diff($csvHeaders, array_merge($tableColumns, ['address$type'],['discipline_name'])))) {
+            throw new Exception("Les colonnes CSV ne correspondent pas à la table $tableName ou au valeur demandé pour la table teacher. CSVHEADERS : $csvHeaders[0] , TABLECOLUMN : $tableColumns[0]");
         }
         else {
             return true;
@@ -120,9 +120,9 @@ class Dashboard{
             }
             fclose($handle);
             return true;
-        } catch (Exception) {
+        } catch (Exception $e) {
             fclose($handle);
-            throw new Exception("Erreur lors du traitement du fichier CSV (merci de vérifier que vous repectez bien le guide utilisateur).");
+            throw new Exception("Erreur lors du traitement du fichier CSV (merci de vérifier que vous repectez bien le guide utilisateur).".$e->getMessage());
         }
     }
 
@@ -355,7 +355,7 @@ class Dashboard{
         }
 
         // Ecriture des en-têtes dans le fichier CSV
-        fputcsv($output, $headers);
+        fputcsv($output, $headers, ";");
 
         if (empty($headers)) {
             throw new Exception("Les en-têtes sont manquants ou invalides pour la table $tableName.");
@@ -390,7 +390,7 @@ class Dashboard{
                 $row['address$type'] = $row['address_type'];
                 unset($row['address_type']);
             }
-            fputcsv($output, $row);
+            fputcsv($output, $row, ';');
         }
         fclose($output);
         $csvData = ob_get_clean();
@@ -438,7 +438,7 @@ class Dashboard{
         }
 
         // Ecriture des en-têtes dans le fichier CSV
-        fputcsv($output, $columns);
+        fputcsv($output, $columns,";");
 
         fclose($output);
         $csvData = ob_get_clean();
