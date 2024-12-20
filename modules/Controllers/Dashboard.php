@@ -49,7 +49,6 @@ class Dashboard {
      * @return void
      */
     public function show(): void {
-        print_r('coucou22');
         // Récupération de l'instance de la base de données et des classes associées
         $db = \Includes\Database::getInstance();
         $model = new \Blog\Models\Dashboard($db);

@@ -168,6 +168,8 @@ class Dashboard{
                   VALUES (" . implode(',', array_map(fn($i) => ":column$i", range(1, count($tableColumns)))) . ")";
         $stmt = $this->db->getConn()->prepare($query);
 
+        error_log(print_r($data, true));
+
         foreach ($data as $index => $value) {
             $stmt->bindValue(":column" . ($index + 1), $value ?: null);
         }
