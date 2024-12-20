@@ -68,7 +68,7 @@ class Dashboard{
     public function getCsvHeaders(string $csvFilePath): array {
         // Ouverture du fichier CSV et lecture de la première ligne (les en-têtes)
         if (($handle = fopen($csvFilePath, "r")) !== FALSE) {
-            $headers = fgetcsv($handle,1000,",");
+            $headers = fgetcsv($handle,1000,";");
             fclose($handle);
             return $headers ?: [];
         }
@@ -423,13 +423,12 @@ class Dashboard{
         }
 
         // Récupération des colonnes de la base de données
-        $query = "DESCRIBE $tableName";
-        $stmt = $db->getConn()->prepare($query);
-        $stmt->execute();
+        $columns = $this->getTableColumn($tableName);
 
-        $columns = [];
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $columns[] = $row['Field'];
+        // Ajout de colonnes spécifiques pour la table 'teacher'
+        if ($tableName === 'teacher') {
+            $columns[] = 'address$type';
+            $columns[] = 'discipline';
         }
 
         // Vérification que des colonnes ont bien été trouvées
