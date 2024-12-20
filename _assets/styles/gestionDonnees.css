@@ -43,6 +43,7 @@ h4 {
     cursor: pointer;
     padding-bottom: 20px;
     color: #E8CE7E;
+    font-weight: bold;
 }
 
 .tooltip-container:hover::after {
