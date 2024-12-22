@@ -111,6 +111,40 @@ class Dispatcher {
                 exit();
             }
 
+            if (isset($_POST['action']) && $_POST['action'] === 'GenerateTable' && isset($_POST['dicoCoef'])) {
+                $dictCoef = json_decode($_POST['dicoCoef'], true);
+
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    echo json_encode(['error' => 'Invalid dicoCoef data.']);
+                    exit();
+                }
+
+                $resultDispatchList = $dispatcherModel->dispatcher($dictCoef)[0];
+
+                $response = [];
+                foreach ($resultDispatchList as $resultDispatch) {
+                    $response[] = [
+                        'teacher_firstname' => $resultDispatch['teacher_firstname'],
+                        'teacher_name' => $resultDispatch['teacher_name'],
+                        'id_teacher' => $resultDispatch['id_teacher'],
+                        'student_firstname' => $resultDispatch['student_firstname'],
+                        'student_name' => $resultDispatch['student_name'],
+                        'student_number' => $resultDispatch['student_number'],
+                        'company_name' => $resultDispatch['company_name'],
+                        'internship_identifier' => $resultDispatch['internship_identifier'],
+                        'formation' => $resultDispatch['formation'],
+                        'class_group' => $resultDispatch['class_group'],
+                        'internship_subject' => $resultDispatch['internship_subject'],
+                        'address' => $resultDispatch['address'],
+                        'score' => $resultDispatch['score'],
+                    ];
+                }
+
+                header('Content-Type: application/json');
+                echo json_encode($response);
+                exit();
+            }
+
             if (isset($_POST['action-save']) && $_POST['action-save'] !== 'default') {
                 $coefficients = [];
                 foreach ($_POST['coef'] as $criteria => $coef) {
@@ -123,6 +157,7 @@ class Dispatcher {
 
                 $dispatcherModel->saveCoefficients($coefficients, $_SESSION['identifier'], (int)$_POST['action-save']);
             }
+
 
             if (isset($_POST['searchInternship']) && isset($_POST['searchTeacher'])) {
                 $tmpmessage = $this->association_direct($dispatcherModel);

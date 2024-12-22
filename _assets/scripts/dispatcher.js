@@ -476,3 +476,149 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+/** Partie 5: Dispatcher **/
+
+document.addEventListener('DOMContentLoaded', function () {
+    const generateBtn = document.getElementById('generate-btn');
+
+    function getDictCoef() {
+        const jsonString = document.getElementById('dictCoefJson').value;
+        try {
+            return JSON.parse(jsonString);
+        } catch (e) {
+            console.error("Invalid JSON string in dictCoefJson:", e);
+            return {};
+        }
+    }
+
+    function fetchDispatchTable() {
+        const dictCoef = getDictCoef();
+
+        console.log(dictCoef);
+        fetch('./dispatcher', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'GenerateTable',
+                dicoCoef: JSON.stringify(dictCoef)
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(errorText => {
+                        console.error('Fetch error response:', errorText);
+                        throw new Error('Network response was not ok');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                createDispatchTable(data);
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    }
+
+    function renderStars(score) {
+        const fullStars = Math.floor(score);
+        const decimalPart = score - fullStars;
+        const halfStars = Math.abs(decimalPart - 0.5) <= 0.1 ? 1 : 0;
+        const emptyStars = 5 - fullStars - halfStars;
+
+        let stars = '';
+
+        for (let i = 0; i < fullStars; i++) {
+            stars += '<span class="filled">★</span>';
+        }
+
+        if (halfStars) {
+            stars += '<span class="half">☆</span>';
+        }
+
+        for (let i = 0; i < emptyStars; i++) {
+            stars += '<span class="empty">☆</span>';
+        }
+
+        return stars;
+    }
+
+
+    function createDispatchTable(data) {
+        const tableContainer = document.querySelector('.table-container');
+        const dispatcherControls = document.getElementById('dispatcher-controls');
+
+        tableContainer.innerHTML = '';
+
+        const table = document.createElement('table');
+        table.classList.add('highlight', 'centered', 'responsive-table');
+        table.id = 'dispatch-table';
+
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+        <tr>
+            <th>Enseignant</th>
+            <th>Etudiant</th>
+            <th>Stage</th>
+            <th>Formation</th>
+            <th>Groupe</th>
+            <th>Date Expérience</th>
+            <th>Sujet</th>
+            <th>Adresse</th>
+            <th>Score</th>
+            <th>Associer</th>
+        </tr>
+           `;
+
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+
+        data.forEach(resultDispatch => {
+            const row = document.createElement('tr');
+            row.classList.add('dispatch-row');
+            row.setAttribute('data-internship-identifier', `${resultDispatch.internship_identifier}$${resultDispatch.id_teacher}`);
+
+            row.innerHTML = `
+            <td>${resultDispatch.teacher_firstname} ${resultDispatch.teacher_name} (${resultDispatch.id_teacher})</td>
+            <td>${resultDispatch.student_firstname} ${resultDispatch.student_name} (${resultDispatch.student_number})</td>
+            <td>${resultDispatch.company_name} (${resultDispatch.internship_identifier})</td>
+            <td>${resultDispatch.formation}</td>
+            <td>${resultDispatch.class_group}</td>
+            <td>dd/mm/yyyy</td>
+            <td>${resultDispatch.internship_subject}</td>
+            <td>${resultDispatch.address}</td>
+            <td>
+                <div class="star-rating" data-tooltip="${resultDispatch.score}" data-position="top">
+                    ${renderStars(resultDispatch.score)}
+                </div>
+            </td>
+            <td>
+                <p>
+                    <label class="center">
+                        <input type="checkbox" class="dispatch-checkbox center-align filled-in" id="listTupleAssociate[]" name="listTupleAssociate[]" value="${resultDispatch.id_teacher}$${resultDispatch.internship_identifier}$${resultDispatch.score}" />
+                        <span data-type="checkbox"></span>
+                    </label>
+                </p>
+            </td>
+        `;
+
+            tbody.appendChild(row);
+        });
+
+        table.appendChild(tbody);
+
+        tableContainer.appendChild(table);
+        dispatcherControls.style.display = 'table';
+    }
+
+
+    generateBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        fetchDispatchTable();
+    });
+});
+
+
